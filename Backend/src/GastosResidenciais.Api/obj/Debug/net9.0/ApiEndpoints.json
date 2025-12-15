@@ -1,0 +1,116 @@
+[
+  {
+    "ContainingType": "GastosResidenciais.Api.Controllers.CategoriaController",
+    "Method": "CriarCategoria",
+    "RelativePath": "api/Categoria",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categoriaDTO",
+        "Type": "GastosResidenciais.Application.DTOs.CategoriaDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GastosResidenciais.Api.Controllers.CategoriaController",
+    "Method": "ListarCategorias",
+    "RelativePath": "api/Categoria",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GastosResidenciais.API.Controllers.PessoaController",
+    "Method": "CriarPessoa",
+    "RelativePath": "api/Pessoa",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "pessoaDTO",
+        "Type": "GastosResidenciais.Application.DTOs.PessoaDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GastosResidenciais.API.Controllers.PessoaController",
+    "Method": "ListarPessoas",
+    "RelativePath": "api/Pessoa",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GastosResidenciais.API.Controllers.PessoaController",
+    "Method": "ExcluirPessoa",
+    "RelativePath": "api/Pessoa/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GastosResidenciais.Api.Controllers.TransacaoController",
+    "Method": "CriarTransacao",
+    "RelativePath": "api/Transacao",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "transacaoDTO",
+        "Type": "GastosResidenciais.Application.DTOs.TransacaoDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GastosResidenciais.Api.Controllers.TransacaoController",
+    "Method": "ListarTransacoes",
+    "RelativePath": "api/Transacao",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GastosResidenciais.Api.Controllers.TransacaoController",
+    "Method": "ListarTotalTransacoesPorCategoria",
+    "RelativePath": "api/Transacao/totalPorCategoria",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GastosResidenciais.Api.Controllers.TransacaoController",
+    "Method": "ListarTotalTransacoesPorPessoa",
+    "RelativePath": "api/Transacao/totalPorPessoa",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]
