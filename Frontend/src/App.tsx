@@ -9,16 +9,17 @@ import Transacoes from "./pages/Transacoes";
 import "./App.css";
 
 function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(true); // sidebar aberta por padrão
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
   return (
     <Router>
       <div className="App">
         <NavBar toggleSidebar={toggleSidebar} />
         <div className="App-body">
           <SideBar isOpen={sidebarOpen} />
-          <div className="App-content">
+          <div className={`App-content ${sidebarOpen ? "" : "collapsed"}`}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/pessoas" element={<Pessoas />} />

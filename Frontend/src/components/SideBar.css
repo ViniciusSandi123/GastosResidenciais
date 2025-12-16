@@ -7,8 +7,13 @@
   background-color: #eee;
   padding: 10px;
   box-sizing: border-box;
-  overflow-y: auto;
   transition: width 0.3s;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.sidebar.sidebar-close {
+  width: 50px;
 }
 
 .sidebar ul {
@@ -37,8 +42,13 @@
 }
 
 .sidebar svg {
-  width: 16px;
-  height: 16px;
+  width: 30px;
+  height: 30px;
   vertical-align: middle;
   margin-right: 8px;
+}
+
+.sidebar-link.collapsed {
+  justify-content: center;
+  padding: 10px 0;
 }
