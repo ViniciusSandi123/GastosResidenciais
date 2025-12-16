@@ -11,6 +11,7 @@
 
 .App-content {
   position: relative;
+  z-index: 1;
   overflow-y: auto;
   margin-top: 50px;
   margin-left: 200px;
