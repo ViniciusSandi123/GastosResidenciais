@@ -2,13 +2,8 @@ import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SideBar from "./components/SideBar";
 import NavBar from "./components/NavBar";
-import HomePage from "./pages/HomePage/HomePage";
-import CadastroPessoas from "./pages/Pessoas/CadastroPessoas";
-import ListagemPessoas from "./pages/Pessoas/ListagemPessoas";
-import CadastroCategorias from "./pages/Categorias/CadastroCategorias";
-import ListagemCategorias from "./pages/Categorias/ListagemCategorias";
-import ListagemTransacoes from "./pages/Transacoes/ListagemTransacoes";
-import "./App.css";
+import "./styles/App.css";
+import routes from "./routes";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -26,21 +21,9 @@ function App() {
           />
           <div className={`App-content ${sidebarOpen ? "" : "collapsed"}`}>
             <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/pessoas/cadastrar" element={<CadastroPessoas />} />
-              <Route path="/pessoas/listar" element={<ListagemPessoas />} />
-              <Route
-                path="/categorias/cadastrar"
-                element={<CadastroCategorias />}
-              />
-              <Route
-                path="/categorias/listar"
-                element={<ListagemCategorias />}
-              />
-              <Route
-                path="/transacoes/listar"
-                element={<ListagemTransacoes />}
-              />
+              {routes.map((route, index) => (
+                <Route key={index} path={route.path} element={route.element} />
+              ))}
             </Routes>
           </div>
         </div>
