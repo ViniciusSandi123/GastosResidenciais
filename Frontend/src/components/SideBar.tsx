@@ -7,7 +7,6 @@ import {
   CreditCardIcon,
   ChevronRightIcon,
 } from "@heroicons/react/24/outline";
-import "./SideBar.css";
 
 interface SideBarProps {
   isOpen: boolean;
@@ -24,27 +23,37 @@ function SideBar({ isOpen, openSidebar }: SideBarProps) {
   }, [isOpen]);
 
   return (
-    <div className={`sidebar ${isOpen ? "" : "sidebar-close"}`}>
-      <ul>
-        <li className="sidebar-item">
+    <div
+      className={`fixed top-[50px] left-0 h-[calc(100vh-50px)] bg-gray-200 p-2 transition-all duration-300 overflow-y-auto z-[1000] ${
+        isOpen ? "w-[200px]" : "w-[50px]"
+      }`}
+    >
+      <ul className="list-none p-0 m-0">
+        {/* Home */}
+        <li className="my-2">
           <Link
             to="/"
             title="Home"
-            className={isOpen ? "sidebar-link" : "sidebar-link collapsed"}
+            className={`flex items-center font-bold text-gray-800 px-2 py-2 border-l-4 border-transparent transition-colors duration-200 hover:border-blue-600 hover:bg-gray-300 ${
+              isOpen ? "" : "justify-center py-2"
+            }`}
             onClick={() => {
               openSidebar();
               setOpenMenu(null);
             }}
           >
-            <HomeIcon />
+            <HomeIcon className="w-7 h-7 mr-2 shrink-0" />
             {isOpen && <span>Home</span>}
           </Link>
         </li>
 
-        <li className="sidebar-item">
+        {/* Pessoas */}
+        <li className="my-2 relative">
           <button
             type="button"
-            className={`sidebar-link ${!isOpen ? "collapsed" : ""}`}
+            className={`w-full flex items-center font-bold text-gray-800 px-2 py-2 border-l-4 border-transparent transition-colors duration-200 hover:border-blue-600 hover:bg-gray-300 ${
+              !isOpen ? "justify-center py-2" : ""
+            }`}
             onClick={() => {
               if (!isOpen) {
                 openSidebar();
@@ -54,24 +63,34 @@ function SideBar({ isOpen, openSidebar }: SideBarProps) {
               }
             }}
           >
-            <UserIcon />
+            <UserIcon className="w-7 h-7 mr-2 shrink-0" />
             {isOpen && <span>Pessoas</span>}
             {isOpen && (
               <ChevronRightIcon
-                className={`chevron ${openMenu === "pessoas" ? "open" : ""}`}
+                className={`ml-auto w-4 transition-transform duration-200 ${
+                  openMenu === "pessoas" ? "rotate-90" : ""
+                }`}
               />
             )}
           </button>
 
           {openMenu === "pessoas" && (
-            <ul className="submenu submenu-pessoas">
+            <ul className="fixed left-[200px] top-[118px] w-[180px] bg-gray-50 shadow-md border-l border-gray-300 py-1 z-[2000]">
               <li>
-                <Link to="/pessoas/cadastrar" onClick={() => setOpenMenu(null)}>
+                <Link
+                  to="/pessoas/cadastrar"
+                  className="block px-3 py-2 text-gray-800 hover:bg-gray-200"
+                  onClick={() => setOpenMenu(null)}
+                >
                   Cadastro de Pessoas
                 </Link>
               </li>
               <li>
-                <Link to="/pessoas/listar" onClick={() => setOpenMenu(null)}>
+                <Link
+                  to="/pessoas/listar"
+                  className="block px-3 py-2 text-gray-800 hover:bg-gray-200"
+                  onClick={() => setOpenMenu(null)}
+                >
                   Listagem de Pessoas cadastradas
                 </Link>
               </li>
@@ -79,10 +98,13 @@ function SideBar({ isOpen, openSidebar }: SideBarProps) {
           )}
         </li>
 
-        <li className="sidebar-item">
+        {/* Categorias */}
+        <li className="my-2 relative">
           <button
             type="button"
-            className={`sidebar-link ${!isOpen ? "collapsed" : ""}`}
+            className={`w-full flex items-center font-bold text-gray-800 px-2 py-2 border-l-4 border-transparent transition-colors duration-200 hover:border-blue-600 hover:bg-gray-300 ${
+              !isOpen ? "justify-center py-2" : ""
+            }`}
             onClick={() => {
               if (!isOpen) {
                 openSidebar();
@@ -92,27 +114,34 @@ function SideBar({ isOpen, openSidebar }: SideBarProps) {
               }
             }}
           >
-            <FolderIcon />
+            <FolderIcon className="w-7 h-7 mr-2 shrink-0" />
             {isOpen && <span>Categorias</span>}
             {isOpen && (
               <ChevronRightIcon
-                className={`chevron ${openMenu === "categorias" ? "open" : ""}`}
+                className={`ml-auto w-4 transition-transform duration-200 ${
+                  openMenu === "categorias" ? "rotate-90" : ""
+                }`}
               />
             )}
           </button>
 
           {openMenu === "categorias" && (
-            <ul className="submenu submenu-categorias">
+            <ul className="fixed left-[200px] top-[170px] w-[180px] bg-gray-50 shadow-md border-l border-gray-300 py-1 z-[2000]">
               <li>
                 <Link
                   to="/categorias/cadastrar"
+                  className="block px-3 py-2 text-gray-800 hover:bg-gray-200"
                   onClick={() => setOpenMenu(null)}
                 >
                   Cadastro de Categorias
                 </Link>
               </li>
               <li>
-                <Link to="/categorias/listar" onClick={() => setOpenMenu(null)}>
+                <Link
+                  to="/categorias/listar"
+                  className="block px-3 py-2 text-gray-800 hover:bg-gray-200"
+                  onClick={() => setOpenMenu(null)}
+                >
                   Listagem de Categorias Cadastradas
                 </Link>
               </li>
@@ -120,10 +149,13 @@ function SideBar({ isOpen, openSidebar }: SideBarProps) {
           )}
         </li>
 
-        <li className="sidebar-item">
+        {/* Transações */}
+        <li className="my-2 relative">
           <button
             type="button"
-            className={`sidebar-link ${!isOpen ? "collapsed" : ""}`}
+            className={`w-full flex items-center font-bold text-gray-800 px-2 py-2 border-l-4 border-transparent transition-colors duration-200 hover:border-blue-600 hover:bg-gray-300 ${
+              !isOpen ? "justify-center py-2" : ""
+            }`}
             onClick={() => {
               if (!isOpen) {
                 openSidebar();
@@ -133,19 +165,25 @@ function SideBar({ isOpen, openSidebar }: SideBarProps) {
               }
             }}
           >
-            <CreditCardIcon />
+            <CreditCardIcon className="w-7 h-7 mr-2 shrink-0" />
             {isOpen && <span>Transações</span>}
             {isOpen && (
               <ChevronRightIcon
-                className={`chevron ${openMenu === "transacoes" ? "open" : ""}`}
+                className={`ml-auto w-4 transition-transform duration-200 ${
+                  openMenu === "transacoes" ? "rotate-90" : ""
+                }`}
               />
             )}
           </button>
 
           {openMenu === "transacoes" && (
-            <ul className="submenu submenu-transacoes">
+            <ul className="fixed left-[200px] top-[220px] w-[180px] bg-gray-50 shadow-md border-l border-gray-300 py-1 z-[2000]">
               <li>
-                <Link to="/transacoes/listar" onClick={() => setOpenMenu(null)}>
+                <Link
+                  to="/transacoes/listar"
+                  className="block px-3 py-2 text-gray-800 hover:bg-gray-200"
+                  onClick={() => setOpenMenu(null)}
+                >
                   Listagem de Transações
                 </Link>
               </li>
