@@ -29,7 +29,6 @@ function SideBar({ isOpen, openSidebar }: SideBarProps) {
       }`}
     >
       <ul className="list-none p-0 m-0">
-        {/* Home */}
         <li className="my-2">
           <Link
             to="/"
@@ -47,7 +46,6 @@ function SideBar({ isOpen, openSidebar }: SideBarProps) {
           </Link>
         </li>
 
-        {/* Pessoas */}
         <li className="my-2 relative">
           <button
             type="button"
@@ -78,15 +76,6 @@ function SideBar({ isOpen, openSidebar }: SideBarProps) {
             <ul className="fixed left-[200px] top-[118px] w-[180px] bg-gray-50 shadow-md border-l border-gray-300 py-1 z-[2000]">
               <li>
                 <Link
-                  to="/pessoas/cadastrar"
-                  className="block px-3 py-2 text-gray-800 hover:bg-gray-200"
-                  onClick={() => setOpenMenu(null)}
-                >
-                  Cadastro de Pessoas
-                </Link>
-              </li>
-              <li>
-                <Link
                   to="/pessoas/listar"
                   className="block px-3 py-2 text-gray-800 hover:bg-gray-200"
                   onClick={() => setOpenMenu(null)}
@@ -98,7 +87,6 @@ function SideBar({ isOpen, openSidebar }: SideBarProps) {
           )}
         </li>
 
-        {/* Categorias */}
         <li className="my-2 relative">
           <button
             type="button"
@@ -129,15 +117,6 @@ function SideBar({ isOpen, openSidebar }: SideBarProps) {
             <ul className="fixed left-[200px] top-[170px] w-[180px] bg-gray-50 shadow-md border-l border-gray-300 py-1 z-[2000]">
               <li>
                 <Link
-                  to="/categorias/cadastrar"
-                  className="block px-3 py-2 text-gray-800 hover:bg-gray-200"
-                  onClick={() => setOpenMenu(null)}
-                >
-                  Cadastro de Categorias
-                </Link>
-              </li>
-              <li>
-                <Link
                   to="/categorias/listar"
                   className="block px-3 py-2 text-gray-800 hover:bg-gray-200"
                   onClick={() => setOpenMenu(null)}
@@ -149,7 +128,6 @@ function SideBar({ isOpen, openSidebar }: SideBarProps) {
           )}
         </li>
 
-        {/* Transações */}
         <li className="my-2 relative">
           <button
             type="button"
