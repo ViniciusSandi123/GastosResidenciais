@@ -8,12 +8,17 @@ interface TransacaoPorCategoria {
   saldo: number;
 }
 
-interface ApiResponse {
-  categorias: TransacaoPorCategoria[];
-  pessoas: any;
-  totalReceitas: number;
-  totalDespesas: number;
-  saldo: number;
+interface ApiResponsePorCategoria {
+  items: {
+    pessoas: any;
+    categorias: TransacaoPorCategoria[];
+    totalReceitas: number;
+    totalDespesas: number;
+    saldo: number;
+  };
+  total: number;
+  page: number;
+  pageSize: number;
 }
 
 function ListagemTransacoesPorCategoria() {
@@ -23,27 +28,38 @@ function ListagemTransacoesPorCategoria() {
     totalDespesas: number;
     saldo: number;
   } | null>(null);
+
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState<number>(1);
+  const [pageSize] = useState<number>(10);
+  const [total, setTotal] = useState<number>(0);
+  const totalPages = Math.ceil(total / pageSize);
 
   useEffect(() => {
     async function fetchTransacoes() {
       try {
+        setLoading(true);
+
         const response = await fetch(
-          "http://localhost:5144/api/Transacao/totalPorCategoria"
+          `http://localhost:5144/api/Transacao/totalPorCategoria?page=${page}&pageSize=${pageSize}`
         );
+
         if (!response.ok) {
           throw new Error(
             `Erro ao buscar as transações por categoria: ${response.statusText}`
           );
         }
-        const data: ApiResponse = await response.json();
-        setTransacoes(data.categorias);
+
+        const data: ApiResponsePorCategoria = await response.json();
+
+        setTransacoes(data.items.categorias ?? []);
         setTotais({
-          totalReceitas: data.totalReceitas,
-          totalDespesas: data.totalDespesas,
-          saldo: data.saldo,
+          totalReceitas: data.items.totalReceitas ?? 0,
+          totalDespesas: data.items.totalDespesas ?? 0,
+          saldo: data.items.saldo ?? 0,
         });
+        setTotal(data.total ?? 0);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -52,10 +68,11 @@ function ListagemTransacoesPorCategoria() {
     }
 
     fetchTransacoes();
-  }, []);
+  }, [page, pageSize]);
 
   if (loading)
     return <div className="p-6">Carregando transações por categoria...</div>;
+
   if (error) return <div className="p-6 text-red-500">Erro: {error}</div>;
 
   const formatarMoeda = (valor: number) =>
@@ -103,6 +120,28 @@ function ListagemTransacoesPorCategoria() {
           )}
         </tbody>
       </table>
+
+      <div className="flex justify-between items-center mt-4">
+        <button
+          onClick={() => setPage((p) => Math.max(p - 1, 1))}
+          disabled={page === 1}
+          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+        >
+          Anterior
+        </button>
+
+        <span className="text-sm">
+          Página {page} de {totalPages}
+        </span>
+
+        <button
+          onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+          disabled={page === totalPages}
+          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+        >
+          Próxima
+        </button>
+      </div>
     </div>
   );
 }

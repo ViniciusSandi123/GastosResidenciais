@@ -11,8 +11,8 @@ namespace GastosResidenciais.Application.Interfaces
     public interface ITransacaoService
     {
         Task<Result> AdicionarTransacao(TransacaoDTO transacaoDTO);
-        Task<IEnumerable<TransacaoDTO>> ListarTransacoes();
-        Task<TransacoesTotalDTO> ListarTotalTransacoesPorPessoa();
-        Task<TransacoesTotalDTO> ListarTotalTransacoesPorCategoria();
+        Task<(IEnumerable<TransacaoDTO> items, int total)> ListarTransacoes(int page, int pageSize);
+        Task<(TransacoesTotalDTO items, int total)> ListarTotalTransacoesPorPessoa(int page, int pageSize);
+        Task<(TransacoesTotalDTO items, int total)> ListarTotalTransacoesPorCategoria(int page, int pageSize);
     }
 }

@@ -1,15 +1,18 @@
 import { useState } from "react";
-import { eFinalidade } from "../../helpers/enums/efinalidade";
+import {
+  eFinalidade,
+  eFinalidadeDescricao,
+} from "../../helpers/enums/eFinalidade";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (descricao: string, finalidade: number) => void;
+  onSave: (descricao: string, finalidade: eFinalidade) => void;
 }
 
 function CadastroCategoriasModal({ isOpen, onClose, onSave }: ModalProps) {
   const [descricao, setDescricao] = useState("");
-  const [finalidade, setFinalidade] = useState<number>(0);
+  const [finalidade, setFinalidade] = useState<eFinalidade | "">("");
 
   if (!isOpen) return null;
 
@@ -36,10 +39,13 @@ function CadastroCategoriasModal({ isOpen, onClose, onSave }: ModalProps) {
             }
             className="w-full border px-2 py-1 rounded"
           >
-            <option></option>
-            <option value={eFinalidade.Despesa}>Despesa</option>
-            <option value={eFinalidade.Receita}>Receita</option>
-            <option value={eFinalidade.Ambos}>Ambos</option>
+            <option value="">Selecione</option>
+
+            {Object.values(eFinalidade).map((valor) => (
+              <option key={valor} value={valor}>
+                {eFinalidadeDescricao[valor]}
+              </option>
+            ))}
           </select>
         </div>
         <div className="flex justify-end gap-2">
@@ -51,6 +57,7 @@ function CadastroCategoriasModal({ isOpen, onClose, onSave }: ModalProps) {
           </button>
           <button
             onClick={() => {
+              if (finalidade === "") return;
               onSave(descricao, finalidade);
               onClose();
             }}

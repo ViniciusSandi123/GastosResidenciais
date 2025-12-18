@@ -66,30 +66,35 @@ namespace GastosResidenciais.Tests.Services
         }
 
         [Fact]
-        public async Task ListarPessoas_DeveRetornarListaDeDTOs()
+        public async Task ListarPessoas_DeveRetornarListaPaginadaETotal()
         {
             var pessoas = new List<Pessoa>
-            {
-                new Pessoa { Id = 1, Nome = "Vinicius", Idade = 30 },
-                new Pessoa { Id = 2, Nome = "Maria", Idade = 25 }
-            };
+    {
+        new Pessoa { Id = 1, Nome = "Vinicius", Idade = 30 },
+        new Pessoa { Id = 2, Nome = "Maria", Idade = 25 }
+    };
 
             var pessoasDTO = new List<PessoaDTO>
-            {
-                new PessoaDTO { Id = 1, Nome = "Vinicius", Idade = 30 },
-                new PessoaDTO { Id = 2, Nome = "Maria", Idade = 25 }
-            };
+    {
+        new PessoaDTO { Id = 1, Nome = "Vinicius", Idade = 30 },
+        new PessoaDTO { Id = 2, Nome = "Maria", Idade = 25 }
+    };
 
-            _repositoryMock.Setup(r => r.ListarPessoasAsync()).ReturnsAsync(pessoas);
-            _mapperMock.Setup(m => m.Map<IEnumerable<PessoaDTO>>(pessoas)).Returns(pessoasDTO);
+            _repositoryMock
+                .Setup(r => r.ListarPessoasAsync())
+                .ReturnsAsync(pessoas);
 
-            var result = await _service.ListarPessoas();
+            _mapperMock
+                .Setup(m => m.Map<IEnumerable<PessoaDTO>>(pessoas))
+                .Returns(pessoasDTO);
 
-            Assert.NotNull(result);
-            var lista = Assert.IsType<List<PessoaDTO>>(result);
-            Assert.Equal(2, lista.Count);
-            Assert.Contains(lista, p => p.Nome == "Vinicius" && p.Idade == 30);
-            Assert.Contains(lista, p => p.Nome == "Maria" && p.Idade == 25);
+            var (items, total) = await _service.ListarPessoas(1, 10);
+
+            Assert.Equal(2, total);
+            Assert.Equal(2, items.Count());
+
+            Assert.Contains(items, p => p.Nome == "Vinicius" && p.Idade == 30);
+            Assert.Contains(items, p => p.Nome == "Maria" && p.Idade == 25);
         }
     }
 }

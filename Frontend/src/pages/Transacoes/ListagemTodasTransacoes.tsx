@@ -13,23 +13,40 @@ export interface Transacao {
   valor: number;
 }
 
+interface ApiResponse {
+  items: any[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
 function ListagemTodasTransacoes() {
   const [transacoes, setTransacoes] = useState<Transacao[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState<number>(1);
+  const [pageSize] = useState<number>(10);
+  const [total, setTotal] = useState<number>(0);
+  const totalPages = Math.ceil(total / pageSize);
 
   useEffect(() => {
-    async function fetchCategorias() {
+    async function fetchTransacoes() {
       try {
-        const response = await fetch("http://localhost:5144/api/Transacao");
+        setLoading(true);
+
+        const response = await fetch(
+          `http://localhost:5144/api/Transacao?page=${page}&pageSize=${pageSize}`
+        );
+
         if (!response.ok) {
           throw new Error(
             `Erro ao buscar as Transações cadastradas: ${response.statusText}`
           );
         }
-        const data: Transacao[] = await response.json();
 
-        const transacoes: Transacao[] = data.map((t: any) => ({
+        const data: ApiResponse = await response.json();
+
+        const transacoesFormatadas: Transacao[] = data.items.map((t: any) => ({
           id: t.id,
           descricao: t.descricao,
           valor: t.valor,
@@ -41,7 +58,8 @@ function ListagemTodasTransacoes() {
           pessoaNome: t.pessoa?.nome,
         }));
 
-        setTransacoes(transacoes);
+        setTransacoes(transacoesFormatadas);
+        setTotal(data.total);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -49,8 +67,8 @@ function ListagemTodasTransacoes() {
       }
     }
 
-    fetchCategorias();
-  }, []);
+    fetchTransacoes();
+  }, [page, pageSize]);
 
   if (loading) return <div className="p-6">Carregando todas transações...</div>;
   if (error) return <div className="p-6 text-red-500">Erro: {error}</div>;
@@ -88,6 +106,28 @@ function ListagemTodasTransacoes() {
           ))}
         </tbody>
       </table>
+
+      <div className="flex justify-between items-center mt-4">
+        <button
+          onClick={() => setPage((p) => Math.max(p - 1, 1))}
+          disabled={page === 1}
+          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+        >
+          Anterior
+        </button>
+
+        <span className="text-sm">
+          Página {page} de {totalPages}
+        </span>
+
+        <button
+          onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+          disabled={page === totalPages}
+          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+        >
+          Próxima
+        </button>
+      </div>
     </div>
   );
 }

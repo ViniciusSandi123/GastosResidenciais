@@ -29,11 +29,17 @@ namespace GastosResidenciais.Application.Services
             return Result.Ok();
         }
 
-        public async Task<IEnumerable<CategoriaDTO>> ListarCategorias()
+        public async Task<(IEnumerable<CategoriaDTO> items, int total)> ListarCategorias(int page, int pageSize)
         {
             var retorno = await _categoriaRepository.ListarCategoriasAsync();
             var categorias = _mapper.Map<IEnumerable<CategoriaDTO>>(retorno);
-            return categorias;
+            var total = categorias.Count();
+            var items = categorias
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+            return (items, total);
+
         }
     }
 }

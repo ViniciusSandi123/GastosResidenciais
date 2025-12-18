@@ -39,14 +39,20 @@ namespace GastosResidenciais.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ListarPessoas()
+        public async Task<IActionResult> ListarPessoas(int page = 1, int pageSize = 10)
         {
-            var pessoas = await _pessoaService.ListarPessoas();
+            var (items, total) = await _pessoaService.ListarPessoas(page,pageSize);
 
-            if (!pessoas.Any())
+            if (!items.Any())
                 return NoContent();
 
-            return Ok(pessoas);
+            return Ok(new
+            {
+                items,
+                total,
+                page,
+                pageSize
+            });
         }
     }
 }

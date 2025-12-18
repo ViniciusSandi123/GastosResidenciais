@@ -12,6 +12,6 @@ namespace GastosResidenciais.Application.Interfaces
     {
         Task<Result> AdicionarPessoa(PessoaDTO pessoaDTO);
         Task<Result> DeletarPessoa(int id);
-        Task<IEnumerable<PessoaDTO>> ListarPessoas();
+        Task<(IEnumerable<PessoaDTO> items, int total)> ListarPessoas(int page, int pageSize);
     }
 }

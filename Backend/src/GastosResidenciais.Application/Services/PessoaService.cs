@@ -39,11 +39,16 @@ namespace GastosResidenciais.Application.Services
             return Result.Ok();
         }
 
-        public async Task<IEnumerable<PessoaDTO>> ListarPessoas()
+        public async Task<(IEnumerable<PessoaDTO> items, int total)> ListarPessoas(int page, int pageSize)
         {
             var retorno = await _pessoaRepository.ListarPessoasAsync();
             var pessoas = _mapper.Map<IEnumerable<PessoaDTO>>(retorno);
-            return pessoas;
+            var total = pessoas.Count();
+            var items = pessoas
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+            return (items,total);
         }
     }
 }

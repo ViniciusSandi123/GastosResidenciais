@@ -11,6 +11,6 @@ namespace GastosResidenciais.Application.Interfaces
     public interface ICategoriaService
     {
         Task<Result> AdicionarCategoria (CategoriaDTO categoriaDTO);
-        Task<IEnumerable<CategoriaDTO>> ListarCategorias();
+        Task<(IEnumerable<CategoriaDTO> items, int total)> ListarCategorias(int page, int pageSize);
     }
 }

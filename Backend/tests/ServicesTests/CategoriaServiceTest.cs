@@ -41,7 +41,7 @@ namespace GastosResidenciais.Tests.Services
         }
 
         [Fact]
-        public async Task ListarCategorias_DeveRetornarListaDeDTOs()
+        public async Task ListarCategorias_DeveRetornarListaPaginadaETotal()
         {
             var categorias = new List<Categoria>
             {
@@ -55,16 +55,22 @@ namespace GastosResidenciais.Tests.Services
                 new CategoriaDTO { Id = 2, Descricao = "Transporte", Finalidade = eFinalidade.Despesa }
             };
 
-            _repositoryMock.Setup(r => r.ListarCategoriasAsync()).ReturnsAsync(categorias);
-            _mapperMock.Setup(m => m.Map<IEnumerable<CategoriaDTO>>(categorias)).Returns(categoriasDTO);
+            _repositoryMock
+                .Setup(r => r.ListarCategoriasAsync())
+                .ReturnsAsync(categorias);
 
-            var result = await _service.ListarCategorias();
+            _mapperMock
+                .Setup(m => m.Map<IEnumerable<CategoriaDTO>>(categorias))
+                .Returns(categoriasDTO);
 
-            Assert.NotNull(result);
-            var lista = Assert.IsType<List<CategoriaDTO>>(result);
-            Assert.Equal(2, lista.Count);
-            Assert.Contains(lista, c => c.Descricao == "Aluguel" && c.Finalidade == eFinalidade.Receita);
-            Assert.Contains(lista, c => c.Descricao == "Transporte" && c.Finalidade == eFinalidade.Despesa);
+            var (items, total) = await _service.ListarCategorias(1, 10);
+
+            Assert.Equal(2, total);
+            Assert.Equal(2, items.Count());
+
+            Assert.Contains(items, c => c.Descricao == "Aluguel" && c.Finalidade == eFinalidade.Receita);
+            Assert.Contains(items, c => c.Descricao == "Transporte" && c.Finalidade == eFinalidade.Despesa);
         }
+
     }
 }

@@ -94,7 +94,7 @@ namespace GastosResidenciais.Tests.Services
         }
 
         [Fact]
-        public async Task ListarTransacoes_DeveRetornarListaDeDTOs()
+        public async Task ListarTransacoes_DeveRetornarItensPaginadosETotal()
         {
             var transacoes = new List<Transacao>
             {
@@ -102,20 +102,24 @@ namespace GastosResidenciais.Tests.Services
                 Transacao.Criar("Aluguel", 800, eTipo.Despesa, 2, 1)
             };
 
-            var transacoesDTO = new List<TransacaoDTO>
+                    var transacoesDTO = new List<TransacaoDTO>
             {
                 new TransacaoDTO { Descricao = "Salário", Valor = 2000, Tipo = eTipo.Receita },
                 new TransacaoDTO { Descricao = "Aluguel", Valor = 800, Tipo = eTipo.Despesa }
             };
 
-            _transacaoRepoMock.Setup(r => r.ListarTransacoesAsync()).ReturnsAsync(transacoes);
-            _mapperMock.Setup(m => m.Map<IEnumerable<TransacaoDTO>>(transacoes)).Returns(transacoesDTO);
+            _transacaoRepoMock
+                .Setup(r => r.ListarTransacoesAsync())
+                .ReturnsAsync(transacoes);
 
-            var result = await _service.ListarTransacoes();
+            _mapperMock
+                .Setup(m => m.Map<IEnumerable<TransacaoDTO>>(transacoes))
+                .Returns(transacoesDTO);
 
-            Assert.NotNull(result);
-            var lista = Assert.IsType<List<TransacaoDTO>>(result);
-            Assert.Equal(2, lista.Count);
+            var (items, total) = await _service.ListarTransacoes(1, 10);
+
+            Assert.Equal(2, total);
+            Assert.Equal(2, items.Count());
         }
 
         [Fact]
@@ -127,7 +131,7 @@ namespace GastosResidenciais.Tests.Services
                 new Pessoa { Id = 2, Nome = "Maria", Idade = 25 }
             };
 
-            var transacoes = new List<Transacao>
+                    var transacoes = new List<Transacao>
             {
                 Transacao.Criar("Salário", 2000, eTipo.Receita, 1, 1),
                 Transacao.Criar("Aluguel", 800, eTipo.Despesa, 2, 1),
@@ -137,14 +141,25 @@ namespace GastosResidenciais.Tests.Services
             _pessoaRepoMock.Setup(r => r.ListarPessoasAsync()).ReturnsAsync(pessoas);
             _transacaoRepoMock.Setup(r => r.ListarTransacoesAsync()).ReturnsAsync(transacoes);
 
-            var result = await _service.ListarTotalTransacoesPorPessoa();
+            var (items, total) = await _service.ListarTotalTransacoesPorPessoa(1, 10);
 
-            Assert.NotNull(result);
-            Assert.Equal(2500, result.TotalReceitas);
-            Assert.Equal(800, result.TotalDespesas);
-            Assert.Contains(result.Pessoas, p => p.Nome == "Carlos" && p.TotalReceitas == 2000 && p.TotalDespesas == 800);
-            Assert.Contains(result.Pessoas, p => p.Nome == "Maria" && p.TotalReceitas == 500 && p.TotalDespesas == 0);
+            Assert.Equal(2, total);
+            Assert.Equal(2500, items.TotalReceitas);
+            Assert.Equal(800, items.TotalDespesas);
+
+            Assert.Contains(items.Pessoas, p =>
+                p.Nome == "Carlos" &&
+                p.TotalReceitas == 2000 &&
+                p.TotalDespesas == 800
+            );
+
+            Assert.Contains(items.Pessoas, p =>
+                p.Nome == "Maria" &&
+                p.TotalReceitas == 500 &&
+                p.TotalDespesas == 0
+            );
         }
+
 
         [Fact]
         public async Task ListarTotalTransacoesPorCategoria_DeveCalcularTotaisCorretamente()
@@ -155,7 +170,7 @@ namespace GastosResidenciais.Tests.Services
                 new Categoria { Id = 2, Descricao = "Aluguel", Finalidade = eFinalidade.Despesa }
             };
 
-            var transacoes = new List<Transacao>
+                    var transacoes = new List<Transacao>
             {
                 Transacao.Criar("Salário", 2000, eTipo.Receita, 1, 1),
                 Transacao.Criar("Aluguel", 800, eTipo.Despesa, 2, 1),
@@ -165,13 +180,22 @@ namespace GastosResidenciais.Tests.Services
             _categoriaRepoMock.Setup(r => r.ListarCategoriasAsync()).ReturnsAsync(categorias);
             _transacaoRepoMock.Setup(r => r.ListarTransacoesAsync()).ReturnsAsync(transacoes);
 
-            var result = await _service.ListarTotalTransacoesPorCategoria();
+            var (items, total) = await _service.ListarTotalTransacoesPorCategoria(1, 10);
 
-            Assert.NotNull(result);
-            Assert.Equal(2500, result.TotalReceitas);
-            Assert.Equal(800, result.TotalDespesas);
-            Assert.Contains(result.Categorias, c => c.Descricao == "Salário" && c.TotalReceitas == 2500);
-            Assert.Contains(result.Categorias, c => c.Descricao == "Aluguel" && c.TotalDespesas == 800);
+            Assert.Equal(2, total);
+            Assert.Equal(2500, items.TotalReceitas);
+            Assert.Equal(800, items.TotalDespesas);
+
+            Assert.Contains(items.Categorias, c =>
+                c.Descricao == "Salário" &&
+                c.TotalReceitas == 2500
+            );
+
+            Assert.Contains(items.Categorias, c =>
+                c.Descricao == "Aluguel" &&
+                c.TotalDespesas == 800
+            );
         }
+
     }
 }

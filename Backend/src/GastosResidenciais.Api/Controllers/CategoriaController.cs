@@ -27,14 +27,21 @@ namespace GastosResidenciais.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ListarCategorias()
+        public async Task<IActionResult> ListarCategorias(int page = 1, int pageSize = 10)
         {
-            var categorias = await _categoriaService.ListarCategorias();
+            var (items, total) = await _categoriaService.ListarCategorias(page, pageSize);
 
-            if (!categorias.Any())
+            if (!items.Any())
                 return NoContent();
 
-            return Ok(categorias);
+            return Ok(new
+            {
+                items,
+                total,
+                page,
+                pageSize
+            });
+
         }
     }
 }

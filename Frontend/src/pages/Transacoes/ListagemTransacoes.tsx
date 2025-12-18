@@ -49,7 +49,7 @@ function ListagemTransacoes() {
           </button>
           <button
             onClick={() => setIsFiltroOpen(true)}
-            className="bg-gray-200 text-gray-700 p-2 rounded hover:bg-gray-300 cursor-pointer"
+            className="bg-gray-400 text-gray-700 p-2 rounded hover:bg-gray-300 cursor-pointer"
           >
             <FunnelIcon className="h-5 w-5" />
           </button>

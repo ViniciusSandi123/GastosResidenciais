@@ -26,36 +26,54 @@ namespace GastosResidenciais.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ListarTransacoes()
+        public async Task<IActionResult> ListarTransacoes(int page = 1 , int pageSize = 10)
         {
-            var transacoes = await _transacaoService.ListarTransacoes();
+            var (items, total) = await _transacaoService.ListarTransacoes(page, pageSize);
 
-            if (!transacoes.Any())
+            if (!items.Any())
                 return NoContent();
 
-            return Ok(transacoes);
+            return Ok(new
+            {
+                items,
+                total,
+                page,
+                pageSize
+            });
         }
 
         [HttpGet("totalPorPessoa")]
-        public async Task<IActionResult> ListarTotalTransacoesPorPessoa()
+        public async Task<IActionResult> ListarTotalTransacoesPorPessoa(int page = 1, int pageSize = 10)
         {
-            var transacoes = await _transacaoService.ListarTotalTransacoesPorPessoa();
+            var (items, total) = await _transacaoService.ListarTotalTransacoesPorPessoa(page, pageSize);
 
-            if (transacoes.Pessoas.Count() == 0)
+            if (!items.Pessoas.Any())
                 return NoContent();
 
-            return Ok(transacoes);
+            return Ok(new
+            {
+                items,
+                total,
+                page,
+                pageSize
+            });
         }
 
         [HttpGet("totalPorCategoria")]
-        public async Task<IActionResult> ListarTotalTransacoesPorCategoria()
+        public async Task<IActionResult> ListarTotalTransacoesPorCategoria(int page = 1, int pageSize = 10)
         {
-            var transacoes = await _transacaoService.ListarTotalTransacoesPorCategoria();
+            var (items, total) = await _transacaoService.ListarTotalTransacoesPorCategoria(page, pageSize);
 
-            if (transacoes.Categorias.Count() == 0)
+            if (!items.Categorias.Any())
                 return NoContent();
 
-            return Ok(transacoes);
+            return Ok(new
+            {
+                items,
+                total,
+                page,
+                pageSize
+            });
         }
     }
 }

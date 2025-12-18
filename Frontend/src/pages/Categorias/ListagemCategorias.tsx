@@ -8,24 +8,39 @@ interface Categoria {
   finalidadeDescricao: string;
 }
 
+interface ApiResponseCategorias {
+  items: Categoria[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
 function ListagemCategorias() {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [mensagem, setMensagem] = useState<string | null>(null);
+  const [page, setPage] = useState<number>(1);
+  const [pageSize] = useState<number>(10);
+  const [total, setTotal] = useState<number>(0);
+  const totalPages = Math.ceil(total / pageSize);
 
   useEffect(() => {
     async function fetchCategorias() {
       try {
-        const response = await fetch("http://localhost:5144/api/Categoria");
+        const response = await fetch(
+          `http://localhost:5144/api/Categoria?page=${page}&pageSize=${pageSize}`
+        );
         if (!response.ok) {
           throw new Error(
             `Erro ao buscar as Categorias cadastradas: ${response.statusText}`
           );
         }
-        const data: Categoria[] = await response.json();
-        setCategorias(data);
+        const data: ApiResponseCategorias = await response.json();
+
+        setCategorias(Array.isArray(data.items) ? data.items : []);
+        setTotal(data.total ?? 0);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -34,18 +49,21 @@ function ListagemCategorias() {
     }
 
     fetchCategorias();
-  }, []);
+  }, [page, pageSize]);
 
   async function handleAdicionarCategoria(
     descricao: string,
     finalidade: number
   ) {
     try {
-      const response = await fetch("http://localhost:5144/api/Categoria", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ descricao, finalidade }),
-      });
+      const response = await fetch(
+        `http://localhost:5144/api/Categoria?page=${page}&pageSize=${pageSize}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ descricao, finalidade }),
+        }
+      );
 
       if (response.status === 201) {
         setMensagem("Categoria adicionada com sucesso!");
@@ -114,6 +132,28 @@ function ListagemCategorias() {
         onClose={() => setIsModalOpen(false)}
         onSave={handleAdicionarCategoria}
       />
+
+      <div className="flex justify-between items-center mt-4">
+        <button
+          onClick={() => setPage((p) => Math.max(p - 1, 1))}
+          disabled={page === 1}
+          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+        >
+          Anterior
+        </button>
+
+        <span className="text-sm">
+          Página {page} de {totalPages}
+        </span>
+
+        <button
+          onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+          disabled={page === totalPages}
+          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+        >
+          Próxima
+        </button>
+      </div>
     </div>
   );
 }

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
-  HomeIcon,
   UserIcon,
   FolderIcon,
   CreditCardIcon,
@@ -29,23 +28,6 @@ function SideBar({ isOpen, openSidebar }: SideBarProps) {
       }`}
     >
       <ul className="list-none p-0 m-0">
-        <li className="my-2">
-          <Link
-            to="/"
-            title="Home"
-            className={`flex items-center font-bold text-gray-800 px-2 py-2 border-l-4 border-transparent transition-colors duration-200 hover:border-blue-600 hover:bg-gray-300 ${
-              isOpen ? "" : "justify-center py-2"
-            }`}
-            onClick={() => {
-              openSidebar();
-              setOpenMenu(null);
-            }}
-          >
-            <HomeIcon className="w-7 h-7 mr-2 shrink-0" />
-            {isOpen && <span>Home</span>}
-          </Link>
-        </li>
-
         <li className="my-2 relative">
           <button
             type="button"

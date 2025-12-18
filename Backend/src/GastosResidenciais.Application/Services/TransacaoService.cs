@@ -55,19 +55,24 @@ namespace GastosResidenciais.Application.Services
             return Result.Ok();
         }
 
-        public async Task<IEnumerable<TransacaoDTO>> ListarTransacoes()
+        public async Task<(IEnumerable<TransacaoDTO> items, int total)> ListarTransacoes(int page, int pageSize)
         {
             var retorno = await _transacaoRepository.ListarTransacoesAsync();
             var transacoes = _mapper.Map<IEnumerable<TransacaoDTO>>(retorno);
-            return transacoes;
+            var total = transacoes.Count();
+            var items = transacoes
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+            return (items, total);
         }
 
-        public async Task<TransacoesTotalDTO> ListarTotalTransacoesPorPessoa()
+        public async Task<(TransacoesTotalDTO items, int total)> ListarTotalTransacoesPorPessoa(int page, int pageSize)
         {
-            var pessoas = await _pessoaRepository.ListarPessoasAsync();
+            var pessoasDb = await _pessoaRepository.ListarPessoasAsync();
             var transacoes = await _transacaoRepository.ListarTransacoesAsync();
 
-            var pessoasComTotais = pessoas
+            var pessoasComTotais = pessoasDb
                 .GroupJoin(
                     transacoes,
                     p => p.Id,
@@ -89,15 +94,24 @@ namespace GastosResidenciais.Application.Services
             var totalReceitas = pessoasComTotais.Sum(p => p.TotalReceitas);
             var totalDespesas = pessoasComTotais.Sum(p => p.TotalDespesas);
 
-            return new TransacoesTotalDTO
+            var total = pessoasComTotais.Count;
+
+            var pessoasPaginadas = pessoasComTotais
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var items = new TransacoesTotalDTO
             {
-                Pessoas = pessoasComTotais,
+                Pessoas = pessoasPaginadas,
                 TotalReceitas = totalReceitas,
                 TotalDespesas = totalDespesas
             };
+
+            return (items, total);
         }
 
-        public async Task<TransacoesTotalDTO> ListarTotalTransacoesPorCategoria()
+        public async Task<(TransacoesTotalDTO items, int total)> ListarTotalTransacoesPorCategoria(int page, int pageSize)
         {
             var categorias = await _categoriaRepository.ListarCategoriasAsync();
             var transacoes = await _transacaoRepository.ListarTransacoesAsync();
@@ -123,12 +137,21 @@ namespace GastosResidenciais.Application.Services
             var totalReceitas = categoriasComTotais.Sum(p => p.TotalReceitas);
             var totalDespesas = categoriasComTotais.Sum(p => p.TotalDespesas);
 
-            return new TransacoesTotalDTO
+            var total = categoriasComTotais.Count();
+
+            var categoriasPaginadas = categoriasComTotais
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var items = new TransacoesTotalDTO
             {
-                Categorias = categoriasComTotais,
+                Categorias = categoriasPaginadas,
                 TotalReceitas = totalReceitas,
                 TotalDespesas = totalDespesas
             };
+
+            return (items, total);
         }
     }
 }
