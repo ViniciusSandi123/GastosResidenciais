@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Paginacao from "../../components/Paginacao";
 
 interface TransacaoPorCategoria {
   idCategoria: number;
@@ -120,28 +121,7 @@ function ListagemTransacoesPorCategoria() {
           )}
         </tbody>
       </table>
-
-      <div className="flex justify-between items-center mt-4">
-        <button
-          onClick={() => setPage((p) => Math.max(p - 1, 1))}
-          disabled={page === 1}
-          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
-        >
-          Anterior
-        </button>
-
-        <span className="text-sm">
-          Página {page} de {totalPages}
-        </span>
-
-        <button
-          onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
-          disabled={page === totalPages}
-          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
-        >
-          Próxima
-        </button>
-      </div>
+      <Paginacao page={page} totalPages={totalPages} onPageChange={setPage} />
     </div>
   );
 }

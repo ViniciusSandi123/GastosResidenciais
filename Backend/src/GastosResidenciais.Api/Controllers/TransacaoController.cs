@@ -30,9 +30,6 @@ namespace GastosResidenciais.Api.Controllers
         {
             var (items, total) = await _transacaoService.ListarTransacoes(page, pageSize);
 
-            if (!items.Any())
-                return NoContent();
-
             return Ok(new
             {
                 items,
@@ -47,9 +44,6 @@ namespace GastosResidenciais.Api.Controllers
         {
             var (items, total) = await _transacaoService.ListarTotalTransacoesPorPessoa(page, pageSize);
 
-            if (!items.Pessoas.Any())
-                return NoContent();
-
             return Ok(new
             {
                 items,
@@ -63,9 +57,6 @@ namespace GastosResidenciais.Api.Controllers
         public async Task<IActionResult> ListarTotalTransacoesPorCategoria(int page = 1, int pageSize = 10)
         {
             var (items, total) = await _transacaoService.ListarTotalTransacoesPorCategoria(page, pageSize);
-
-            if (!items.Categorias.Any())
-                return NoContent();
 
             return Ok(new
             {

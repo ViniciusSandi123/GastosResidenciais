@@ -31,9 +31,6 @@ namespace GastosResidenciais.Api.Controllers
         {
             var (items, total) = await _categoriaService.ListarCategorias(page, pageSize);
 
-            if (!items.Any())
-                return NoContent();
-
             return Ok(new
             {
                 items,

@@ -43,9 +43,6 @@ namespace GastosResidenciais.API.Controllers
         {
             var (items, total) = await _pessoaService.ListarPessoas(page,pageSize);
 
-            if (!items.Any())
-                return NoContent();
-
             return Ok(new
             {
                 items,
