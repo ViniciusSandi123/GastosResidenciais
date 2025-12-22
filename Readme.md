@@ -65,8 +65,7 @@ npm run build
 npm run preview
 
 ---
-
-🚀 Endpoints principais
+Endpoints principais
 
 - Backend Swagger: http://localhost:5144/swagger
 - Frontend: http://localhost:5173/ ou http://localhost:4173/
